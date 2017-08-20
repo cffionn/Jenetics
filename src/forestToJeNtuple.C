@@ -8,10 +8,9 @@
 
 int forestToJeNtuple(const std::string inFileName)
 {
-  jetData jData;
-
   const std::string outFileName = "outFile.root";
-  TFile* outFile_p = new TFile(outFileName.c_str(), "READ");
+  TFile* outFile_p = new TFile(outFileName.c_str(), "RECREATE");
+  jetData jData;
   TTree* outTree_p = new TTree("outTree", "");
   outTree_p->Branch("nref", &jData.nref, "nref/I");
   outTree_p->Branch("jtpt", jData.jtpt, "jtpt[nref]/F");
