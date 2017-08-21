@@ -7,15 +7,14 @@ class chromoCut{
  public:
   std::string fullCut;
   
-  Double_t maxPtFracCut;
-  Double_t sumRing1PtFracCut;
-  Double_t sumRing2PtFracCut;
-  Double_t sumRing3PtFracCut;
- 
-  std::string maxPtFracComp;
-  std::string sumRing1PtFracComp;
-  std::string sumRing2PtFracComp;
-  std::string sumRing3PtFracComp;
+  Double_t maxPtFracCutHigh;
+  Double_t maxPtFracCutLow;
+  Double_t sumRing1PtFracCutHigh;
+  Double_t sumRing1PtFracCutLow;
+  Double_t sumRing2PtFracCutHigh;
+  Double_t sumRing2PtFracCutLow;
+  Double_t sumRing3PtFracCutHigh;
+  Double_t sumRing3PtFracCutLow;
 
   Double_t efficiency;
   Double_t fakeReduction;
@@ -24,33 +23,32 @@ class chromoCut{
   chromoCut();
   ~chromoCut();
 
-  void setMaxPtFracCut(Double_t inVal){maxPtFracCut = inVal; return;}
-  void setSumRing1PtFracCut(Double_t inVal){sumRing1PtFracCut = inVal; return;}
-  void setSumRing2PtFracCut(Double_t inVal){sumRing2PtFracCut = inVal; return;}
-  void setSumRing3PtFracCut(Double_t inVal){sumRing3PtFracCut = inVal; return;}
+  void setMaxPtFracCutHigh(Double_t inVal){maxPtFracCutHigh = inVal; return;}
+  void setSumRing1PtFracCutHigh(Double_t inVal){sumRing1PtFracCutHigh = inVal; return;}
+  void setSumRing2PtFracCutHigh(Double_t inVal){sumRing2PtFracCutHigh = inVal; return;}
+  void setSumRing3PtFracCutHigh(Double_t inVal){sumRing3PtFracCutHigh = inVal; return;}
 
-  void setMaxPtFracComp(std::string inVal){maxPtFracComp = inVal; return;}
-  void setSumRing1PtFracComp(std::string inVal){sumRing1PtFracComp = inVal; return;}
-  void setSumRing2PtFracComp(std::string inVal){sumRing2PtFracComp = inVal; return;}
-  void setSumRing3PtFracComp(std::string inVal){sumRing3PtFracComp = inVal; return;}
+  void setMaxPtFracCutLow(Double_t inVal){maxPtFracCutLow = inVal; return;}
+  void setSumRing1PtFracCutLow(Double_t inVal){sumRing1PtFracCutLow = inVal; return;}
+  void setSumRing2PtFracCutLow(Double_t inVal){sumRing2PtFracCutLow = inVal; return;}
+  void setSumRing3PtFracCutLow(Double_t inVal){sumRing3PtFracCutLow = inVal; return;}
 
-  Double_t getMaxPtFracCut(){return maxPtFracCut;}
-  Double_t getSumRing1PtFracCut(){return sumRing1PtFracCut;}
-  Double_t getSumRing2PtFracCut(){return sumRing2PtFracCut;}
-  Double_t getSumRing3PtFracCut(){return sumRing3PtFracCut;}
+  Double_t getMaxPtFracCutHigh(){return maxPtFracCutHigh;}
+  Double_t getSumRing1PtFracCutHigh(){return sumRing1PtFracCutHigh;}
+  Double_t getSumRing2PtFracCutHigh(){return sumRing2PtFracCutHigh;}
+  Double_t getSumRing3PtFracCutHigh(){return sumRing3PtFracCutHigh;}
 
-  std::string getMaxPtFracComp(){return maxPtFracComp;}
-  std::string getSumRing1PtFracComp(){return sumRing1PtFracComp;}
-  std::string getSumRing2PtFracComp(){return sumRing2PtFracComp;}
-  std::string getSumRing3PtFracComp(){return sumRing3PtFracComp;}
-
+  Double_t getMaxPtFracCutLow(){return maxPtFracCutLow;}
+  Double_t getSumRing1PtFracCutLow(){return sumRing1PtFracCutLow;}
+  Double_t getSumRing2PtFracCutLow(){return sumRing2PtFracCutLow;}
+  Double_t getSumRing3PtFracCutLow(){return sumRing3PtFracCutLow;}
 
   bool setFullCut();
   std::string getFullCut(){return fullCut;}
 
   void setEfficiency(Double_t inVal){efficiency = inVal;}
   void setFakeReduction(Double_t inVal){fakeReduction = inVal;}
-  void setScore(){score = efficiency*fakeReduction;}
+  void setScore(){efficiency < .95 ? score = 0.00001*fakeReduction : score = fakeReduction;}
 
   Double_t getEfficiency(){return efficiency;}
   Double_t getFakeReduction(){return fakeReduction;}
@@ -61,15 +59,15 @@ class chromoCut{
 chromoCut::chromoCut()
 {
   fullCut = "";
-  maxPtFracCut = -999.;
-  sumRing1PtFracCut = -999.;
-  sumRing2PtFracCut = -999.;
-  sumRing3PtFracCut = -999.;
+  maxPtFracCutHigh = -999.;
+  sumRing1PtFracCutHigh = -999.;
+  sumRing2PtFracCutHigh = -999.;
+  sumRing3PtFracCutHigh = -999.;
 
-  maxPtFracComp = "";
-  sumRing1PtFracComp = "";
-  sumRing2PtFracComp = "";
-  sumRing3PtFracComp = "";
+  maxPtFracCutLow = -999.;
+  sumRing1PtFracCutLow = -999.;
+  sumRing2PtFracCutLow = -999.;
+  sumRing3PtFracCutLow = -999.;
 
   return;
 }
@@ -81,21 +79,26 @@ bool chromoCut::setFullCut()
 {
   bool retBool = true;
 
-  if(maxPtFracCut < 0) retBool = false;
-  if(sumRing1PtFracCut < 0) retBool = false;
-  if(sumRing2PtFracCut < 0) retBool = false;
-  if(sumRing3PtFracCut < 0) retBool = false;
+  if(maxPtFracCutLow < 0) retBool = false;
+  if(sumRing1PtFracCutLow < 0) retBool = false;
+  if(sumRing2PtFracCutLow < 0) retBool = false;
+  if(sumRing3PtFracCutLow < 0) retBool = false;
 
-  if(maxPtFracComp.size() == 0) retBool = false;
-  if(sumRing1PtFracComp.size() == 0) retBool = false;
-  if(sumRing2PtFracComp.size() == 0) retBool = false;
-  if(sumRing3PtFracComp.size() == 0) retBool = false;
+  if(maxPtFracCutHigh < 0) retBool = false;
+  if(sumRing1PtFracCutHigh < 0) retBool = false;
+  if(sumRing2PtFracCutHigh < 0) retBool = false;
+  if(sumRing3PtFracCutHigh < 0) retBool = false;
 
   if(retBool){
-    fullCut = "((" + std::to_string(maxPtFracCut) + " " + maxPtFracComp + " maxPFPt/sumPFPt)";
-    fullCut = fullCut + " && (" + std::to_string(sumRing1PtFracCut) + " " + sumRing1PtFracComp + " sumRing1Pt/sumPFPt)";
-    fullCut = fullCut + " && (" + std::to_string(sumRing2PtFracCut) + " " + sumRing2PtFracComp + " sumRing2Pt/sumPFPt)";
-    fullCut = fullCut + " && (" + std::to_string(sumRing3PtFracCut) + " " + sumRing3PtFracComp + " sumRing3Pt/sumPFPt))";
+    fullCut = "((" + std::to_string(maxPtFracCutLow) + " < maxPFPt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing1PtFracCutLow) + " < sumRing1Pt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing2PtFracCutLow) + " < sumRing2Pt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing3PtFracCutLow) + " < sumRing3Pt/sumPFPt)";
+
+    fullCut = fullCut + " && (" + std::to_string(maxPtFracCutHigh) + " > maxPFPt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing1PtFracCutHigh) + " > sumRing1Pt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing2PtFracCutHigh) + " > sumRing2Pt/sumPFPt)";
+    fullCut = fullCut + " && (" + std::to_string(sumRing3PtFracCutHigh) + " > sumRing3Pt/sumPFPt))";
   }
 
   return retBool;

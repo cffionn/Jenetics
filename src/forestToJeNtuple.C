@@ -226,12 +226,12 @@ int forestToJeNtuple(const std::string inFileName)
     }
    
     for(Int_t i = 0; i < jData.nref; ++i){
-      maxPFPt_[i] = -999;
-      maxPF1Pt_[i] = -999;
-      maxPF2Pt_[i] = -999;
-      maxPF3Pt_[i] = -999;
-      maxPF4Pt_[i] = -999;
-      maxPF5Pt_[i] = -999;
+      maxPFPt_[i] = 0;
+      maxPF1Pt_[i] = 0;
+      maxPF2Pt_[i] = 0;
+      maxPF3Pt_[i] = 0;
+      maxPF4Pt_[i] = 0;
+      maxPF5Pt_[i] = 0;
 
       sumPFPt_[i] = 0;
       sumPF1Pt_[i] = 0;
@@ -239,6 +239,10 @@ int forestToJeNtuple(const std::string inFileName)
       sumPF3Pt_[i] = 0;
       sumPF4Pt_[i] = 0;
       sumPF5Pt_[i] = 0;
+
+      sumRing1Pt_[i] = 0;
+      sumRing2Pt_[i] = 0;
+      sumRing3Pt_[i] = 0;
 
       for(unsigned int j = 0; j < pfPt_p->size(); ++j){
 	if(getDR(pfEta_p->at(j), pfPhi_p->at(j), jData.jteta[i], jData.jtphi[i]) < .3){
@@ -256,9 +260,9 @@ int forestToJeNtuple(const std::string inFileName)
 	  if(pfId_p->at(j) == 4) sumPF4Pt_[i] += pfPt_p->at(j);
 	  if(pfId_p->at(j) == 5) sumPF5Pt_[i] += pfPt_p->at(j);
 
-	  if(getDR(pfEta_p->at(j), pfPhi_p->at(j), jData.jteta[i], jData.jtphi[i]) < .1) sumRing1Pt_[i] += pfPt_p->at(i);
-	  else if(getDR(pfEta_p->at(j), pfPhi_p->at(j), jData.jteta[i], jData.jtphi[i]) < .2) sumRing2Pt_[i] += pfPt_p->at(i);
-	  else sumRing3Pt_[i] += pfPt_p->at(i);
+	  if(getDR(pfEta_p->at(j), pfPhi_p->at(j), jData.jteta[i], jData.jtphi[i]) < .1) sumRing1Pt_[i] += pfPt_p->at(j);
+	  else if(getDR(pfEta_p->at(j), pfPhi_p->at(j), jData.jteta[i], jData.jtphi[i]) < .2) sumRing2Pt_[i] += pfPt_p->at(j);
+	  else sumRing3Pt_[i] += pfPt_p->at(j);
 	}
       }
     }
