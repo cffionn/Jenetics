@@ -54,7 +54,7 @@ int jetGeneration(const std::string inFileName)
   Double_t baseLineFakes = inTree_p->GetEntries(baseLineFakesStr.c_str());
   
   int nGen = 0;
-  while(nGen < 100){
+  while(nGen < 10){
     for(unsigned int i = 0; i < population.size(); ++i){
       std::string cutEff = baseLineEffStr + " && " + population.at(i).getFullCut();
       std::string cutFake = baseLineFakesStr + " && " + population.at(i).getFullCut();
@@ -81,19 +81,62 @@ int jetGeneration(const std::string inFileName)
       }
     }
     
-    std::cout << "Peak score (Gen==" + nGen + "): " << population.at(0).getScore() << std::endl;
+    std::cout << "Peak score (Gen==" << nGen << "): " << population.at(0).getScore() << std::endl;
     nGen++;
     
     std::vector<chromoCut> newPop;
     for(int i = 0; i < 30; ++i){
-      newPop.push_back(population(0));
+      newPop.push_back(population.at(0));
       population.erase(population.begin());
     }
 
     for(int i = 0; i < 20; ++i){
-      int pos = randGen_p->RandInt(0,population.size());
+      int pos = randGen_p->Uniform(0,population.size());
       newPop.push_back(population.at(pos));
       population.erase(population.begin()+pos);
+    }
+
+    population = newPop;
+    std::cout << "Remaining size: " << population.size() << std::endl;
+
+    while(population.size() < 100){
+      int pos1 = randGen_p->Uniform(0,50);
+      int pos2 = randGen_p->Uniform(0,50);
+
+      if(pos1 == pos2) continue;
+
+      chromoCut child = population.at(pos1);
+      child.setSumRing2PtFracCut(population.at(pos2).getSumRing2PtFracCut());
+      child.setSumRing3PtFracCut(population.at(pos2).getSumRing3PtFracCut());
+      child.setSumRing2PtFracComp(population.at(pos2).getSumRing2PtFracComp());
+      child.setSumRing3PtFracComp(population.at(pos2).getSumRing3PtFracComp());
+
+      if(randGen_p->Uniform(0,100) < mutRate) child.setMaxPtFracCut(randGen_p->Uniform(0,1));
+      if(randGen_p->Uniform(0,100) < mutRate) child.setSumRing1PtFracCut(randGen_p->Uniform(0,1));
+      if(randGen_p->Uniform(0,100) < mutRate) child.setSumRing2PtFracCut(randGen_p->Uniform(0,1));
+      if(randGen_p->Uniform(0,100) < mutRate) child.setSumRing3PtFracCut(randGen_p->Uniform(0,1));
+
+      std::string compString = "";
+      if(randGen_p->Uniform(0,100) < mutRate){
+	randGen_p->Uniform(0,1) > .5 ? compString = ">" : compString = "<";
+	child.setMaxPtFracComp(compString);
+      }
+      if(randGen_p->Uniform(0,100) < mutRate){
+	randGen_p->Uniform(0,1) > .5 ? compString = ">" : compString = "<";
+	child.setSumRing1PtFracComp(compString);
+      }
+      if(randGen_p->Uniform(0,100) < mutRate){
+	randGen_p->Uniform(0,1) > .5 ? compString = ">" : compString = "<";
+	child.setSumRing2PtFracComp(compString);
+      }
+      if(randGen_p->Uniform(0,100) < mutRate){
+	randGen_p->Uniform(0,1) > .5 ? compString = ">" : compString = "<";
+	child.setSumRing3PtFracComp(compString);
+      }
+
+      child.setFullCut();
+
+      population.push_back(child);
     }
   }
 

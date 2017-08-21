@@ -34,6 +34,17 @@ class chromoCut{
   void setSumRing2PtFracComp(std::string inVal){sumRing2PtFracComp = inVal; return;}
   void setSumRing3PtFracComp(std::string inVal){sumRing3PtFracComp = inVal; return;}
 
+  Double_t getMaxPtFracCut(){return maxPtFracCut;}
+  Double_t getSumRing1PtFracCut(){return sumRing1PtFracCut;}
+  Double_t getSumRing2PtFracCut(){return sumRing2PtFracCut;}
+  Double_t getSumRing3PtFracCut(){return sumRing3PtFracCut;}
+
+  std::string getMaxPtFracComp(){return maxPtFracComp;}
+  std::string getSumRing1PtFracComp(){return sumRing1PtFracComp;}
+  std::string getSumRing2PtFracComp(){return sumRing2PtFracComp;}
+  std::string getSumRing3PtFracComp(){return sumRing3PtFracComp;}
+
+
   bool setFullCut();
   std::string getFullCut(){return fullCut;}
 

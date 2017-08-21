@@ -71,7 +71,7 @@ int forestToSubJeNtuple(const std::string inFileName)
 
     for(int i = 0; i < jData.nref; ++i){
       if(jData.jtpt[i] < 30) continue;
-      if(jData.jtpt[i] > 50) continue;
+      if(jData.jtpt[i] > 40) continue;
       if(TMath::Abs(jData.jteta[i]) > 1.6) continue;
 
       jtpt_ = jData.jtpt[i];
