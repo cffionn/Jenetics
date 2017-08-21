@@ -13,11 +13,15 @@ MKDIR_BIN=mkdir -p $(LOCAL)/bin
 
 #programs to make
 
-all: mkdirBin forestToJeNtuple.exe
+all: mkdirBin forestToJeNtuple.exe forestToSubJeNtuple.exe jetGeneration.exe
 mkdirBin:
 	$(MKDIR_BIN)
 forestToJeNtuple.exe: src/forestToJeNtuple.C
 	$(CXX) $(CXXFLAGS) $(ROOT) -I $(LOCAL) -o bin/forestToJeNtuple.exe src/forestToJeNtuple.C
+forestToSubJeNtuple.exe: src/forestToSubJeNtuple.C
+	$(CXX) $(CXXFLAGS) $(ROOT) -I $(LOCAL) -o bin/forestToSubJeNtuple.exe src/forestToSubJeNtuple.C
+jetGeneration.exe: src/jetGeneration.C
+	$(CXX) $(CXXFLAGS) $(ROOT) -I $(LOCAL) -o bin/jetGeneration.exe src/jetGeneration.C
 
 clean:
 	rm -f *~
